@@ -1,0 +1,30 @@
+name: Azure Hazi Pipeline
+
+on:
+  workflow_dispatch:      
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kód letöltése
+        uses: actions/checkout@v2
+
+      - name: Belépés az Azure-ba
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Erőforráscsoport létrehozása
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az group create --name HaziPipelineRG --location norwayeast
+
+      - name: Bicep Kód Futtatása
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: '00a36391-9ad7-42bf-8f63-80283f5c7006'
+          resourceGroupName: HaziPipelineRG
+          template: ./main.bicep
+          mode: Incremental
