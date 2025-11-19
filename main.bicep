@@ -1,11 +1,8 @@
 param location string = 'norwayeast'
 
-// Ez hozza létre az erőforráscsoportot
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' existing = {
-  name: 'HaziPipelineRG'
-}
+// A "resource rg" részt KIVETTÜK, mert azt a Pipeline (yml) intézi!
 
-// Ez hoz létre egy tárhelyet
+// Csak a tárolót hozzuk létre
 resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: 'hazistorage${uniqueString(resourceGroup().id)}'
   location: location
